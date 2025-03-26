@@ -1,10 +1,13 @@
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.ObjectPool;
-using System.Text.Json;
 using Npgsql;
+using System.Text.Json;
 using server;
 using server.Classes;
+using server.Config;
 using server.Extensions;
-using Microsoft.AspNetCore.Http.HttpResults;
+using server.Services;
+using DotNetEnv; // Required for loading .env variables
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,9 +23,24 @@ Database database = new Database();
 NpgsqlDataSource db = database.Connection();
 builder.Services.AddSingleton(db);
 
+//Email setup
+var emailSettings = builder.Configuration.GetSection("Email").Get<EmailSettings>();
+if (emailSettings != null)
+{
+  builder.Services.AddSingleton(emailSettings);
+}
+else
+{
+  throw new InvalidOperationException("Email settings are not configured properly.");
+}
+
+builder.Services.AddScoped<IEmailService, EmailService>();
+
+
 var app = builder.Build();
 
 app.UseSession();
+
 
 app.MapGet("/api/login", (Func<HttpContext, Task<IResult>>)GetLogin);
 app.MapPost("/api/login", (Func<HttpContext, LoginRequest, NpgsqlDataSource, Task<IResult>>)Login);
@@ -240,7 +258,7 @@ async Task<List<Ticket>> GetTickets(int company_id)
       ));
     }
   }
-  
+
   return tickets;
 }
 
@@ -361,13 +379,11 @@ async Task<Message> SubmitRating(Rating rating)
   }
 }
 
-async Task<Message> SendEmail(Customer customer)
+async Task<Message> SendEmail(Customer customer, IEmailService emailService)
 {
-  var emailService = new EmailService();
-  await emailService.SendEmail(customer.email, "Your Support-Link",
-    $"Hello {customer.firstname} {customer.lastname}. This is the link to your support-chat http://localhost:5173/chat/{customer.ticket_id}");
+  await emailService.SendEmailAsync(customer.email, "Your Support-Link",
+      $"Hello {customer.firstname} {customer.lastname}. This is the link to your support-chat http://localhost:5173/chat/{customer.ticket_id}");
 
-  Console.WriteLine("Email Sent Successfully!");
   return new Message("Email Sent Successfully!");
 }
 
@@ -416,13 +432,13 @@ async Task<Message> SetPassword(LoginRequest newPassword)
   return new Message("Password updated successfully");
 }
 
-async Task SendWelcomeEmail(SupportAgent agent)
+async Task<Message> SendWelcomeEmail(SupportAgent agent, IEmailService emailService)
 {
-  var emailService = new EmailService();
-  await emailService.SendEmail(agent.email, "Set your password",
+  await emailService.SendEmailAsync(agent.email, "Set your password",
     $"Hello! This is the link to set your new password: http://localhost:5173/setpassword");
 
   Console.WriteLine("Email Sent Successfully!");
+  return new Message("Email sent successfully!");
 }
 
 async Task<ModelFile?> GetModelFile(int company_id)
