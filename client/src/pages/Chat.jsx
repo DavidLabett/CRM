@@ -4,6 +4,7 @@ import { GlobalContext } from "../GlobalContext";
 import Formbridge from "../components/Formbridge.jsx";
 import chatIcon from "../assets/chaticon.png";
 import sendButton from "../assets/sendbutton.png";
+import sendButtonHover from "../assets/sendbutton_hover.png";
 import sendButtonGrey from "../assets/sendbutton_grey.png";
 import chat_active from "../assets/chat_active.png";
 import chat_resolved from "../assets/chat_resolved.png";
@@ -12,20 +13,19 @@ import x_icon from "../assets/x.png";
 export default function Chat() {
   const { UsePost, user } = useContext(GlobalContext);
   const { ticket_id } = useParams();
-
   const navigate = useNavigate();
 
   const [messages, setMessages] = useState([]);
   const [newMessage, setNewMessage] = useState("");
   const [companyName, setCompanyName] = useState("");
-  const [firstMessage, setFirstMessage] = useState("");
   const [currentTicket, setCurrentTicket] = useState([]);
   const [selectedRating, setSelectedRating] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // State for loading
+  const [isHovered, setIsHovered] = useState(false); // State for hover
 
   const isSupport = user ? true : false;
 
-  //takes prompts and fetches ai-response
+  // Fetch AI response
   async function promptAI(prompt) {
     setIsLoading(true);
     setNewMessage("");
@@ -40,41 +40,30 @@ export default function Chat() {
         },
         body: JSON.stringify({
           model: "llama3.2:latest",
-          stream: false, // Get single response? TODO:
+          stream: false,
           prompt: modelFile.modelfile + prompt,
         }),
       });
-
       const data = await response.json();
-      return {
-        message: data.response,
-        isAI: true,
-      };
+      return { message: data.response, isAI: true };
     } catch (error) {
       console.error("Error:", error);
-
-      return {
-        message: prompt,
-        isAI: false,
-      };
+      return { message: prompt, isAI: false };
     } finally {
       setIsLoading(false);
     }
   }
 
-  //Sends Messages to database (and is read through getMessages)
+  // Send message to database
   async function sendMessage(e) {
     e.preventDefault();
-
     let message = newMessage;
     let isAI = false;
 
-    if (user) {
-      if (newMessage.startsWith(">")) {
-        const aiResponse = await promptAI(newMessage);
-        message = aiResponse.message;
-        isAI = aiResponse.isAI;
-      }
+    if (user && newMessage.startsWith(">")) {
+      const aiResponse = await promptAI(newMessage);
+      message = aiResponse.message;
+      isAI = aiResponse.isAI;
     }
 
     const sendData = {
@@ -88,80 +77,184 @@ export default function Chat() {
     const route = `/api/messages/${ticket_id}`;
     await UsePost(sendData, route);
 
-    console.log("isAI true?: ", isAI);
-
     setNewMessage(""); // Clear input field
     await getMessages(ticket_id); // Refresh messages
   }
 
-  //Reads chat-messages
+  // Fetch chat messages and ticket details
   async function getMessages(ticket_id) {
-    //GetMessages:
     let rawResponse = await fetch(`/api/messages/${ticket_id}`);
     let data = await rawResponse.json();
 
-    //GetSingleTicket:
     let rawTicket = await fetch(`/api/tickets/${ticket_id}/single`);
     let ticket = await rawTicket.json();
 
-    setFirstMessage(ticket.message);
     setCompanyName(ticket.company_name);
     setCurrentTicket(ticket);
     setMessages(data);
   }
 
+  // Submit rating
   async function submitRating(selectedRating) {
-    const ratingData = {
-      rating: selectedRating,
-      ticket_id: ticket_id,
-    };
-
+    const ratingData = { rating: selectedRating, ticket_id: ticket_id };
     const route = `/api/ratings/${ticket_id}`;
     await UsePost(ratingData, route);
   }
 
-  useEffect(() => {
-    getMessages(ticket_id);
-  }, [ticket_id]); //load when ticket_id change
-
-  useEffect(() => {
-    if (!ticket_id) return;
-
-    console.log("Entering chatroom.. starting chat");
-    setInterval(() => {
+  // Effect for loading chat messages when ticket_id changes
+  useEffect(
+    function () {
       getMessages(ticket_id);
-    }, 3000); // message-check every 3 sec
+    },
+    [ticket_id]
+  );
 
-    return () => {
-      clearInterval();
-      console.log("Clearing interval, closing chat..");
-    };
-  }, [ticket_id]);
+  // Effect to set up message polling
+  useEffect(
+    function () {
+      if (!ticket_id) return;
+
+      const intervalId = setInterval(function () {
+        getMessages(ticket_id);
+      }, 3000); // Check for new messages every 3 sec
+
+      return function () {
+        clearInterval(intervalId); // Clean up on component unmount
+      };
+    },
+    [ticket_id]
+  );
+
+  // ** Rendering elements **
+
+  // Render message list
+  function renderMessages() {
+    return messages.map(function (chat, index) {
+      return (
+        <li
+          key={index}
+          className={`message ${
+            chat.from_ai ? "ai" : chat.from_support ? "support" : "customer"
+          }`}
+        >
+          <div className="text">{chat.message}</div>
+        </li>
+      );
+    });
+  }
+
+  // Render rating stars for feedback
+  function renderRatingStars() {
+    return [5, 4, 3, 2, 1].map(function (star) {
+      return (
+        <button
+          key={star}
+          className={`star ${star <= selectedRating ? "selected" : ""}`}
+          onClick={function () {
+            setSelectedRating(star);
+            submitRating(star);
+          }}
+        >
+          ★
+        </button>
+      );
+    });
+  }
+
+  // Render chat header
+  function renderChatHeader() {
+    return (
+      <header className="chat-header">
+        <img src={chatIcon} className="chat-icon" alt="chatIcon" />
+        <div className="chat-header-textstack">
+          <h2>{companyName}</h2>
+          <p>Customer Support Chat</p>
+        </div>
+        <div className="icon-stack">
+          <img
+            src={currentTicket.resolved ? chat_resolved : chat_active}
+            className="chat-active"
+            alt="chat_status"
+          />
+          <img
+            src={x_icon}
+            className="x-icon"
+            alt="close"
+            onClick={function () {
+              user ? navigate("/support") : navigate("/");
+            }}
+          />
+        </div>
+      </header>
+    );
+  }
+
+  // Render input field and send button
+  function renderMessageInput() {
+    return (
+      <section className="message-input">
+        <input
+          type="text"
+          value={newMessage}
+          onChange={function (e) {
+            setNewMessage(e.target.value);
+          }}
+          onKeyDown={function (e) {
+            if (e.key === "Enter" && !isLoading && !currentTicket.resolved) {
+              sendMessage(e);
+            }
+          }}
+          placeholder={
+            isLoading
+              ? "Generating AI-response.."
+              : "' >' for AI.. | Write message.."
+          }
+          disabled={currentTicket.resolved ? true : false}
+        />
+        <img
+          src={
+            currentTicket.resolved || isLoading
+              ? sendButtonGrey
+              : isHovered
+              ? sendButtonHover
+              : sendButton
+          }
+          type="submit"
+          onClick={!isLoading && !currentTicket.resolved ? sendMessage : null}
+          className={`${
+            currentTicket.resolved || isLoading
+              ? "sendButtonDisabled"
+              : "sendbutton"
+          }`}
+          alt="sendbutton"
+          onMouseEnter={function () {
+            setIsHovered(true);
+          }}
+          onMouseLeave={function () {
+            setIsHovered(false);
+          }}
+        />
+      </section>
+    );
+  }
+
+  // Render feedback section
+  function renderFeedbackSection() {
+    return (
+      <div className="placement-feedback">
+        <div className="feedback">
+          <p>Please rate us!</p>
+          <div className="stars">{renderRatingStars()}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <>
       <div className="placement">
         <section className="chat-container">
-          <header className="chat-header">
-            <img src={chatIcon} className="chat-icon" alt="chatIcon" />
-            <div className="chat-header-textstack">
-              <h2>{companyName}</h2>
-              <p>Customer Support Chat</p>
-            </div>
-            <div className="icon-stack">
-              <img
-                src={currentTicket.resolved ? chat_resolved : chat_active}
-                className="chat-active"
-                alt="chat_status"
-              />
-              <img
-                src={x_icon}
-                className="x-icon"
-                alt="close"
-                onClick={() => (user ? navigate("/support") : navigate("/"))}
-              />
-            </div>
-          </header>
+          {renderChatHeader()}
           <section className="chat-box">
             <ul>
               <div className="inquiry-message">
@@ -184,7 +277,7 @@ export default function Chat() {
                 </div>
               </li>
 
-              {currentTicket.subject == "product" ? (
+              {currentTicket.subject === "product" ? (
                 <li className="message support">
                   <div className="text">
                     To proceed, please specify the product ID or any specific
@@ -200,82 +293,15 @@ export default function Chat() {
                 </li>
               )}
 
-              {messages.map((chat, index) => (
-                <li
-                  key={index}
-                  className={`message ${chat.from_ai
-                      ? "ai"
-                      : chat.from_support
-                        ? "support"
-                        : "customer"
-                    }`}
-                >
-                  <div className="text">{chat.message}</div>
-                </li>
-              ))}
+              {renderMessages()}
             </ul>
           </section>
-          <section className="message-input">
-            <input
-              type="text"
-              value={newMessage}
-              onChange={(e) => setNewMessage(e.target.value)}
-              onKeyDown={(e) => {
-                if (
-                  e.key === "Enter" &&
-                  !isLoading &&
-                  !currentTicket.resolved
-                ) {
-                  sendMessage(e);
-                }
-              }}
-              placeholder={
-                isLoading
-                  ? "Generating AI-response.."
-                  : "' >' for AI.. | Write message.."
-              }
-              disabled={currentTicket.resolved ? true : false}
-            />
-            <img
-              src={
-                currentTicket.resolved || isLoading
-                  ? sendButtonGrey
-                  : sendButton
-              }
-              type="submit"
-              onClick={
-                !isLoading && !currentTicket.resolved ? sendMessage : null
-              }
-              className={`
-    ${currentTicket.resolved || isLoading ? "sendButtonDisabled" : "sendbutton"}
-  `}
-              alt="sendbutton"
-            />
-          </section>
+          {renderMessageInput()}
         </section>
       </div>
 
-      {!user && (
-        <div className="placement-feedback">
+      {!user && renderFeedbackSection()}
 
-          <div className="feedback">
-            <p>Please rate us!</p>
-            <div className="stars">
-              {[5, 4, 3, 2, 1].map((star) => (
-                <button
-                  key={star}
-                  className={`star ${star <= selectedRating ? "selected" : ""}`}
-                  onClick={() => {
-                    setSelectedRating(star), submitRating(star);
-                  }}
-                >
-                  ★
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
       <Formbridge />
     </>
   );

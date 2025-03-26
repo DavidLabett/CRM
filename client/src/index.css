@@ -725,7 +725,7 @@ h3 {
 
 .sendbutton:hover {
   transition: 0.3s;
-  background: var(--green-900);
+  background: var(--green-200);
 }
 
 .sendButtonDisabled {
