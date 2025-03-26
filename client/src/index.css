@@ -9,11 +9,13 @@
   --green-700: #1A4F21;
   --green-600: #2D7C2D;
   --green-400: #7DB77D;
+  --green-300: #7db57d;
 
   --green-800: #3E6F4E;
   --green-600: #79A384;
   
   --blue-600: #6577DC;
+  --blue-chat: #7182e6;
   --blue-900-6: rgba(76, 124, 255, 0.6);
   --blue-900-3: rgba(76, 124, 255, 0.3);
 
@@ -643,7 +645,7 @@ h3 {
 .inquiry-message {
   font-family: 'Roboto', sans-serif;
     color: var(--whiteish-300);
-    background: var(--green-800);
+    background: var(--green-300);
     padding: 10px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -677,14 +679,14 @@ h3 {
 
   .message.support .text {
     color: var(--whiteish-300);
-    background: var(--green-800);
+    background: var(--blue-chat);
     border-bottom-left-radius: 0px;
     margin-left: 5px;
   }
 
   .message.customer .text {
     color: var(--whiteish-300);
-    background: var(--green-800);
+    background: var(--green-300);
     border-bottom-right-radius: 0px;
   }
 
