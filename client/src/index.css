@@ -19,8 +19,8 @@
   --blue-900-6: rgba(76, 124, 255, 0.6);
   --blue-900-3: rgba(76, 124, 255, 0.3);
 
-  --green-800: #3E6F4E;
-  --green-600: #79A384;
+  --green-grey-800: #3E6F4E;
+  --green-grey-600: #79A384;
   --green-grey-400: #BDD7D1;
   --green-200: #E4FDEB;
   --green-100: #C9E6FF;
@@ -392,6 +392,7 @@ p {
 .menu {
   grid-area: menu;
   background-color: var(--green-800);
+  color: var(--whiteish-300);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -404,6 +405,7 @@ p {
     align-items: center;
     justify-content: left;
     background-color: transparent;
+    color: var(--whiteish-300);
     border-bottom: 1px solid var(--gray-400);
   }
 
@@ -444,7 +446,6 @@ p {
 
   .sub-button:active {
     background-color: var(--green-700);
-    padding-right: 10px;
   }
 
   .image-text {
