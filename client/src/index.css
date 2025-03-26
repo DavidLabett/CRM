@@ -1,32 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Magra:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 :root {
 
   background: #F0EEFF;
 
   /* MOCKUP COLORS */
-  --purple-900: #655DFF;
-  --purple-700: #a6a6ff;
-  --purple-600: #B5B5FF;
-  --purple-400: #D1D1FF;
+  --green-900: #1B312F;
+  --green-700: #1A4F21;
+  --green-600: #2D7C2D;
+  --green-400: #7DB77D;
 
-  --blue-purple-800: #677DFF;
-  --blue-purple-600: #86ACFF;
-
+  --green-800: #3E6F4E;
+  --green-600: #79A384;
+  
+  --blue-600: #6577DC;
   --blue-900-6: rgba(76, 124, 255, 0.6);
   --blue-900-3: rgba(76, 124, 255, 0.3);
 
-  --blue-800: #276eab;
-  --blue-600: #A0D3FF;
-  --blue-400: #9AECFF;
-  --blue-200: #BCD4FF;
-  --blue-100: #d1e8fc;
+  --green-800: #3E6F4E;
+  --green-600: #79A384;
+  --green-grey-400: #BDD7D1;
+  --green-200: #E4FDEB;
+  --green-100: #C9E6FF;
 
   --pinkish-700-3: rgba(186, 100, 194, 0.3);
   --pinkish-500-5: rgba(205, 160, 208, 0.5);
 
   --redish-600: #FC7779;
   --redish-400: #ffa5a7;
+  --accent-orange: #E59924;
 
   --whiteish-300: #FDFDFD;
 
@@ -41,7 +43,7 @@
 
 /* ---------------GENERAL--------------- */
 body {
-  font-family: 'Magra', sans-serif;
+  font-family: 'Roboto', sans-serif;
   margin: 0;
 }
 
@@ -70,17 +72,17 @@ p {
 }
 
 .formbridge {
-  color: var(--purple-900);
+  color: var(--green-900);
 }
 .formbridge:hover {
-  color: var(--blue-purple-600);
+  color: var(--green-600);
   cursor: pointer;
 }
 
 .footer-text {
   text-align: center;
   margin-top: 10px;
-  font-family: 'Magra', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--text-color);
 }
 
@@ -92,13 +94,13 @@ p {
     "start-nav"
     "hero";
   grid-template-rows: auto auto;
-  border-radius: 20px;
+  border-radius: 30px;
   border-top-left-radius: 50px;
   border-top-right-radius: 50px;
   width: 80vw;
   max-width: 1200px;
   height: auto;
-  background-color: var(--blue-100);
+  background-color: var(--green-100);
   box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.122);
 
   z-index: 1;
@@ -109,7 +111,7 @@ p {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: var(--blue-purple-800);
+  background-color: var(--green-900);
   color: var(--whiteish-300);
   padding: 20px 30px;
   height: fit-content;
@@ -162,7 +164,7 @@ p {
 .sign-in-btn:hover {
   transition: 0.3s;
   background-color: var(--whiteish-300);
-  color: var(--blue-purple-800);
+  color: var(--green-800);
 }
 
 .hero-container {
@@ -208,7 +210,7 @@ p {
 
 .hero-title {
   font-size: 48px;
-  color: var(--blue-purple-800);
+  color: var(--green-800);
   margin-bottom: 10px;
   line-height: 1.2;
 
@@ -228,7 +230,7 @@ p {
 .cta-button {
   display: inline-flex;
   align-items: center;
-  background-color: var(--redish-600);
+  background-color: var(--blue-600);
   color: white;
   border: none;
   padding: 12px 25px;
@@ -245,8 +247,8 @@ p {
 .cta-button:hover {
   transition: 0.3s;
   background-color: var(--whiteish-300);
-  color: var(--redish-600);
-  outline: 1.5px solid var(--redish-600);
+  color: var(--blue-600);
+  outline: 1.5px solid var(--blue-600);
   transform: translateX(5px);
 }
 
@@ -258,15 +260,15 @@ p {
 }
 
 .features {
-  margin-top: -20px;
+  margin-top: -25px;
   display: flex;
   justify-content: space-between;
   text-align: center;
   background-color: var(--whiteish-300);
   width: 80vw;
   max-width: 1200px;
-  border-bottom-right-radius: 20px;
-  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 40px;
+  border-bottom-left-radius: 40px;
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.122);
 }
 
@@ -277,7 +279,7 @@ p {
   align-items: center;
   flex: 1;
   padding: 30px 20px 20px 20px;
-  border-right: 1px solid var(--blue-100);
+  border-right: 1px solid var(--green-100);
   opacity: 0.7;
   transition: 0.5s;
 }
@@ -318,7 +320,7 @@ p {
 }
 
 .feature-title {
-  color: var(--blue-purple-800);
+  color: var(--green-800);
   margin-bottom: 10px;
   font-size: 20px;
 }
@@ -353,10 +355,9 @@ p {
 
   header {
     grid-area: header;
+    background-color: var(--green-400);
     color: white;
-    background-image: url("../src/assets/Dasboard-box.png");
-    background-size: 100% 100%;
-    border-radius: 10px 10px 0 0;
+    border-radius: 30px 30px 0 0;
 
     display: grid;
     grid-template-areas: "company dashboard";
@@ -386,7 +387,7 @@ p {
 
 .menu {
   grid-area: menu;
-  background-color: var(--purple-600);
+  background-color: var(--green-800);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -409,11 +410,11 @@ p {
   button:disabled {
     background-color: var(--blue-900-6);
     color: var(--whiteish-300);
-    border-left: 4px solid var(--purple-900);
+    border-left: 4px solid var(--green-900);
   }
 
   button:active {
-    background-color: var(--blue-600);
+    background-color: var(--green-600);
   }
 
   #change-dashboard {
@@ -425,7 +426,7 @@ p {
     height: 4ch;
     font-size: 14px;
     background-color: var(--gray-200-3);
-    border-left: 4px solid var(--purple-900);
+    border-left: 4px solid var(--green-900);
     padding-left: 2ch;
   }
 
@@ -438,7 +439,7 @@ p {
   }
 
   .sub-button:active {
-    background-color: var(--blue-200);
+    background-color: var(--green-200);
   }
 
   .image-text {
@@ -447,7 +448,7 @@ p {
   }
 
   .toggled {
-    background-color: var(--blue-600);
+    background-color: var(--green-600);
   }
 }
 
@@ -639,7 +640,7 @@ h3 {
 .inquiry-message {
   font-family: 'Roboto', sans-serif;
     color: var(--whiteish-300);
-    background: var(--blue-purple-800);
+    background: var(--green-800);
     padding: 10px;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
@@ -673,14 +674,14 @@ h3 {
 
   .message.support .text {
     color: var(--whiteish-300);
-    background: var(--blue-800);
+    background: var(--green-800);
     border-bottom-left-radius: 0px;
     margin-left: 5px;
   }
 
   .message.customer .text {
     color: var(--whiteish-300);
-    background: var(--blue-purple-800);
+    background: var(--green-800);
     border-bottom-right-radius: 0px;
   }
 
@@ -718,7 +719,7 @@ h3 {
 
 .sendbutton:hover {
   transition: 0.3s;
-  background: var(--purple-900);
+  background: var(--green-900);
 }
 
 .sendButtonDisabled {
@@ -742,7 +743,7 @@ h3 {
     margin-bottom: 0;
     font-size: 17pt;
     color: var(--text-color);
-    font-family: 'Magra', sans-serif;
+    font-family: 'Roboto', sans-serif;
   }
 
   .stars {
@@ -752,7 +753,7 @@ h3 {
   
   .star {
     font-size: 32pt;
-    color: var(--blue-purple-600);
+    color: var(--green-600);
     background-color: #F0EEFF;
     border: none;
     cursor: pointer;
@@ -760,11 +761,11 @@ h3 {
   
   .star:hover,
   .star:hover ~ .star {
-    color: var(--blue-800);
+    color: var(--green-800);
   }
   
   .star.selected {
-    color: var(--blue-800);
+    color: var(--green-800);
   }
 
 }
@@ -875,12 +876,12 @@ input[type=submit] {
   color: rgb(255, 255, 255);
   width: 100px;
   border-radius: 5px;
-  background-color: var(--blue-purple-800);
+  background-color: var(--green-800);
 }
 
 #submit:hover,
 input[type=submit]:hover {
-  background-color: var(--blue-purple-600);
+  background-color: var(--green-600);
 }
 
 #submit:disabled,
@@ -891,7 +892,7 @@ input[type=submit]:disabled {
 #close:active,
 #submit:active,
 input[type=submit]:active {
-  background-color: var(--blue-600);
+  background-color: var(--green-600);
 }
 
 #message {
@@ -933,7 +934,7 @@ textarea::placeholder {
 }
 
 .iframe-link {
-  color: var(--blue-800)
+  color: var(--green-800)
 }
 
 /* ---------------TicketsTable--------------- */
@@ -943,7 +944,7 @@ textarea::placeholder {
 }
 
 .content>table tr:hover {
-  background-color: var(--purple-400);
+  background-color: var(--green-400);
 }
 
 .content tr {
@@ -1015,13 +1016,13 @@ textarea::placeholder {
 }
 
 .company-select:hover {
-  border-color: var(--purple-900);
-  color: var(--purple-900);
+  border-color: var(--green-900);
+  color: var(--green-900);
 }
 
 .company-option {
   font-size: 20px;
-  font-family: 'Magra', sans-serif;
+  font-family: 'Roboto', sans-serif;
   color: var(--text-color);
 }
 
@@ -1085,7 +1086,8 @@ td {
 
 .support-table-container>table,
 th {
-    background-color: var(--purple-400);
+    background-color: var(--green-800);
+    color: var(--whiteish-300);
 }
 
 .support-table-container>table,
@@ -1122,14 +1124,14 @@ button {
 }
 
 .add-user-top-btn {
-  background-color: var(--blue-purple-800);
+  background-color: var(--green-800);
   color: var(--whiteish-300);
   width: 100%;
   padding: 5px 0px;
 }
 
 .add-user-top-btn:hover {
-  background-color: var(--blue-purple-600);
+  background-color: var(--green-600);
 }
 
 .add-user-btn {
