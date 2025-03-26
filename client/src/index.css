@@ -341,7 +341,7 @@ p {
     "footer footer";
   grid-template-rows: 8ch 4fr 4ch;
   grid-template-columns: 20ch 4fr;
-  border-radius: 10px;
+  border-radius: 40px;
   width: 80vw;
   min-height: 90vh;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
@@ -372,6 +372,8 @@ p {
 
     h2 {
       text-align: center;
+      color: var(--whiteish-300);
+      font-size: 30px;
     }
   }
 
@@ -380,7 +382,7 @@ p {
     text-align: center;
     margin: auto 0;
     background-color: var(--whiteish-300);
-    border-radius: 0 0 10px 10px;
+    border-radius: 0 0 40px 40px;
     border-top: 2px solid var(--gray-400);
   }
 }
@@ -404,11 +406,11 @@ p {
   }
 
   button:hover {
-    background-color: var(--pinkish-700-3);
+    background-color: var(--green-400);
   }
 
   button:disabled {
-    background-color: var(--blue-900-6);
+    background-color: var(--green-900);
     color: var(--whiteish-300);
     border-left: 4px solid var(--green-900);
   }
@@ -431,15 +433,16 @@ p {
   }
 
   .sub-button:hover {
-    background-color: var(--pinkish-500-5);
+    background-color: var(--green-400);
   }
 
   .sub-button:disabled {
-    background-color: var(--blue-900-3);
+    background-color: var(--green-800);
   }
 
   .sub-button:active {
-    background-color: var(--green-200);
+    background-color: var(--green-700);
+    padding-right: 10px;
   }
 
   .image-text {
@@ -940,7 +943,7 @@ textarea::placeholder {
 /* ---------------TicketsTable--------------- */
 
 .content>table tr:nth-child(even) {
-  background-color: #cbe7ff;
+  background-color: var(--green-200);
 }
 
 .content>table tr:hover {

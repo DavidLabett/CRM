@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router";
 import { useContext } from "react";
 import { GlobalContext } from "../GlobalContext.jsx";
-import builders from "../assets/builders.png";
+import builders from "../assets/builders2.png";
 import formbridge from "../assets/formbridge_white_logotext.png";
 import form from "../assets/form2.png";
 import bridge from "../assets/bridge.png";
@@ -29,24 +29,28 @@ export default function StartPage() {
               <span>FAQ</span>
               <span>...</span>
             </div>
-            {
-              user ?
-                <>
-                  <div className="image-text">
-                    <img src="../src/assets/agents_icon.png" />
-                    <div className="nav-links">
-                      <span onClick={() => navigate("/admin")}>{user.firstname} {user.lastname}</span>
-                    </div>
+            {user ? (
+              <>
+                <div className="image-text">
+                  <img src="../src/assets/agents_icon.png" />
+                  <div className="nav-links">
+                    <span onClick={() => navigate("/admin")}>
+                      {user.firstname} {user.lastname}
+                    </span>
                   </div>
-                  <button className="sign-in-btn" onClick={logout}>
-                    ← Sign Out
-                  </button>
-                </>
-                :
-                <button className="sign-in-btn" onClick={() => navigate("/login")}>
-                  Sign In →
+                </div>
+                <button className="sign-in-btn" onClick={logout}>
+                  ← Sign Out
                 </button>
-            }
+              </>
+            ) : (
+              <button
+                className="sign-in-btn"
+                onClick={() => navigate("/login")}
+              >
+                Sign In →
+              </button>
+            )}
           </nav>
 
           <section className="hero-container">
