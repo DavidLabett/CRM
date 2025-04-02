@@ -15,12 +15,11 @@ export default function Admin() {
   const [toggleAdd, setToggleAdd] = useState(false);
 
   const contentList = [
-    { name: "view-support", parent: "support"},
-    { name: "view-form", parent: "form"},
-    { name: "edit-form", parent: "form"},
-    { name: "edit-ai", parent: "edit-ai"},
+    { name: "view-support", parent: "support" },
+    { name: "view-form", parent: "form" },
+    { name: "edit-form", parent: "form" },
+    { name: "edit-ai", parent: "edit-ai" },
   ];
-
 
   async function verifyUser() {
     await getLogin();
@@ -42,14 +41,16 @@ export default function Admin() {
 
   function getComponent() {
     switch (content.name) {
-      case 'view-support':
-        return <SupportTable toggleAdd={toggleAdd} setToggleAdd={setToggleAdd} />
-      case 'view-form':
-        return <Form />
-      case 'edit-form':
-        return <EditForm />
-      case 'edit-ai':
-        return <EditAI />
+      case "view-support":
+        return (
+          <SupportTable toggleAdd={toggleAdd} setToggleAdd={setToggleAdd} />
+        );
+      case "view-form":
+        return <Form />;
+      case "edit-form":
+        return <EditForm />;
+      case "edit-ai":
+        return <EditAI />;
     }
   }
 
@@ -85,7 +86,11 @@ export default function Admin() {
                   </button>
                   <button
                     className={toggleAdd ? "sub-button toggled" : "sub-button"}
-                    onClick={() => (toggleAdd ? setToggleAdd(false) : setToggleAdd(true))}>
+                    id="add-user-btn"
+                    onClick={() =>
+                      toggleAdd ? setToggleAdd(false) : setToggleAdd(true)
+                    }
+                  >
                     Add User
                   </button>
                 </>
@@ -147,11 +152,7 @@ export default function Admin() {
               </button>
             </div>
           </aside>
-          <main>
-            {
-              getComponent(content.name)
-            }
-          </main>
+          <main>{getComponent(content.name)}</main>
           <footer>
             <Formbridge />
           </footer>
